@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="button_layout_padding">4dp</dimen>
+    <dimen name="vertical_margin">16dp</dimen>
+    <dimen name="vertical_button_top_margin">32dp</dimen>
+    <dimen name="barcode_number_text_view_layout_height">42dp</dimen>
+    <dimen name="button_width">96dp</dimen>
+</resources>

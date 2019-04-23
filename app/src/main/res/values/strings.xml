@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Barcode Matcher</string>
+    <string name="activity_history_name">History</string>
+    <string name="permission_camera_rationale">Need camera to run the app</string>
+    <string name="ok">OK</string>
+    <string name="gravity_part_number">Gravity Part Number</string>
+    <string name="part_number">Part Number</string>
+    <string name="button_scan">Scan</string>
+    <string name="button_restart">Reset</string>
+    <string name="number_hint">Number</string>
+    <string name="history_item">History</string>
+    <string name="empty_barcode">No reading</string>
+    <string name="gravity_barcode_error">Please read the gravity barcode</string>
+    <string name="part_barcode_error">Please read the box barcode first</string>
+    <string name="empty_db_gravity_barcode">Gravity Barcode cannot be empty</string>
+    <string name="empty_db_part_barcode">Part Barcode cannot be empty</string>
+    <!-- Title text for the empty view, which describes the empty dog house image [CHAR LIMIT=50] -->
+    <string name="empty_view_title_text">Without Barcode Info Available</string>
+
+    <!-- Subtitle text for the empty view that prompts the user to add a pet [CHAR LIMIT=50] -->
+    <string name="empty_view_subtitle_text">Start a new work day</string>
+
+</resources>

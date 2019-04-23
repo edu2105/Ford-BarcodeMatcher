@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Barcode Matcher</string>
+    <string name="activity_history_name">Historial</string>
+    <string name="gravity_part_number">Código del Gravity</string>
+    <string name="permission_camera_rationale">Se necesita cámara para inicar funcionalidad</string>
+    <string name="ok">OK</string>
+    <string name="part_number">Código de Pieza</string>
+    <string name="button_scan">Escanear</string>
+    <string name="button_restart">Reiniciar</string>
+    <string name="number_hint">Número</string>
+    <string name="history_item">Historial</string>
+    <string name="empty_barcode">Sin lectura</string>
+    <string name="gravity_barcode_error">Por favor escanee el código del gravity</string>
+    <string name="part_barcode_error">Por favor escanee el código de la pieza</string>
+    <string name="empty_db_gravity_barcode">El código del gravity no puede quedar vacío</string>
+    <string name="empty_db_part_barcode">El código de la pieza no puede quedar vacío</string>
+    <!-- Title text for the empty view, which describes the empty dog house image [CHAR LIMIT=50] -->
+    <string name="empty_view_title_text">Sin códigos escaneados</string>
+
+    <!-- Subtitle text for the empty view that prompts the user to add a pet [CHAR LIMIT=50] -->
+    <string name="empty_view_subtitle_text">Comienza un nuevo día de trabajo</string>
+
+</resources>
