@@ -211,12 +211,18 @@ public class MainActivity extends AppCompatActivity {
                         isGravityNeedToWatch = false;
                         gravityBarcodeEditText.setBackgroundResource(R.drawable.barcode_number_text_view_grey_background);
                         gravityBarcodeEditText.setFocusable(false);
-                        gravityBarcodeEditText.setText(codeScanned.substring(
-                                0,
-                                codeScanned.length()-1));
+                        if(codeScanned.equals("-")) {
+                            gravityBarcodeEditText.setText(codeScanned.substring(
+                                    0,
+                                    codeScanned.length()));
+                        } else {
+                            gravityBarcodeEditText.setText(codeScanned.substring(
+                                    0,
+                                    codeScanned.length()-1));
+                        }
                         gravityBarcodeEditText.clearFocus();
                         checkCompatibility(activeHarnessPosImage);
-                    }else {
+                    } else {
                         gravityBarcodeEditText.setText("");
                         handler.removeCallbacks(input_finish_checker);
                     }
