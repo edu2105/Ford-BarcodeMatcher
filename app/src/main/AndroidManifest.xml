@@ -2,10 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.barcodematcher">
 
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +15,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -29,18 +29,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".BarcodeCaptureActivity"
-            android:label="Read Barcode"/>
-
-        <activity android:name=".BarcodeHistoryActivity"
+        <activity
+            android:name=".BarcodeHistoryActivity"
             android:label="@string/activity_history_name"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
 
         <provider
-            android:authorities="com.example.android.barcodematcher"
             android:name=".data.BarcodeProvider"
-            android:exported="false"/>
+            android:authorities="com.example.android.barcodematcher"
+            android:exported="false" />
+
+        <activity
+            android:name=".GravityStarting"
+            android:parentActivityName=".MainActivity"/>
+
+        <activity
+            android:name=".GravityModification"
+            android:parentActivityName=".MainActivity"/>
+
+        <activity
+            android:name=".GravityAddition"
+            android:parentActivityName=".MainActivity" />
 
     </application>
 

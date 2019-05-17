@@ -2,7 +2,6 @@ package com.example.android.barcodematcher;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -17,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.barcodematcher.data.BarcodeContract;
@@ -28,8 +28,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import static android.view.View.GONE;
@@ -44,34 +44,54 @@ public class MainActivity extends AppCompatActivity {
     private ImageView okImage;
     private ImageView notOkImage;
     private ImageView barcodeImage;
-    private ImageView activeHarnessPosImage;
-    private ImageView partPosition;
+    private ImageView messagesImage;
+    private TextView gravityPartPosition;
     private boolean isGravityNeedToWatch;
     private boolean isPartNeedToWatch;
     private boolean isResultOk;
+    private boolean partsUploaded;
     private Runnable input_finish_checker;
     private long last_text_edit = 0;
     private long delay = 50;
     private Handler handler = new Handler();
     private String doorHarnessesLineUp;
+    private List<String[]> resultFromUtils;
     private String[] gravityParts;
     private String[] matrix;
-    private String errorState = ERROR404;
+    private String errorState;
+    private String activePartPosition;
+    private BarcodeMatcherUtils utils;
     private static final int NOMATCH = 0;
     private static final int MATCH = 1;
-    private static final int MAX_COLUMNS = 25;
-    private static final int MAX_ROWS = 4;
     private static final String ERROR404 = "404";
-    private static final String ERRORIMAGE = "ImageError";
+    private static final String ERRORPOSITION = "PositionError";
+    private static final String GRAVITYLINEUPFILE = "GravityLineUp.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        readFromTxt();
-        populateGravity();
-        initValues();
+        utils = new BarcodeMatcherUtils();
+        doorHarnessesLineUp = utils.readFromFile(GRAVITYLINEUPFILE);
+        if(doorHarnessesLineUp.isEmpty()) {
+            partsUploaded = false;
+            Intent gettingStartedIntent = new Intent(this, GravityStarting.class);
+            startActivityForResult(gettingStartedIntent,1);
+        }
+    }
+
+
+    @Override
+    protected void onResume() {
+        if(!doorHarnessesLineUp.isEmpty() && !partsUploaded) {
+            resultFromUtils = utils.populateGravityArray(doorHarnessesLineUp);
+            gravityParts = resultFromUtils.get(0);
+            matrix = resultFromUtils.get(1);
+            partsUploaded = true;
+            initValues();
+        }
+        super.onResume();
     }
 
     @Override
@@ -87,70 +107,22 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, BarcodeHistoryActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.getting_started_item:
+                Intent gettingStartedIntent = new Intent(this, GravityStarting.class);
+                startActivity(gettingStartedIntent);
+                break;
+            case R.id.modification_item:
+                Intent modIntent = new Intent(this, GravityModification.class);
+                startActivity(modIntent);
+                break;
+            case R.id.add_item:
+                Intent addIntent = new Intent(this, GravityAddition.class);
+                startActivity(addIntent);
+                break;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void readFromTxt() {
-        StringBuilder text = new StringBuilder();
-        try{
-            File dcim = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-            File file = new File(dcim, "GravityLineUp.txt");
-
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            while((line = br.readLine()) != null) {
-                text.append(line);
-                text.append('*');
-            }
-            br.close();
-        }catch(IOException e) {
-            e.printStackTrace();
-        }
-        doorHarnessesLineUp = text.toString();
-    }
-
-    private void populateGravity() {
-        int columns;
-        int rows;
-        int indexColumns = 11;
-        int indexRows = doorHarnessesLineUp.indexOf("Filas") + 8;
-        int[] columnsName = new int [MAX_COLUMNS];
-        int[] rowsName = new int [MAX_ROWS];
-        int[] matrixIndex;
-        int auxMatrix = 0;
-        int auxMatrixIndex = 0;
-
-        columns = Integer.valueOf(doorHarnessesLineUp.substring(indexColumns, indexColumns + 2));
-        rows = Integer.valueOf(doorHarnessesLineUp.substring(indexRows, indexRows + 2));
-
-        matrix = new String[columns * rows];
-        matrixIndex = new int[columns * rows];
-        gravityParts = new String[columns * rows];
-
-        for(int r=0; r<rows; r++) {
-            rowsName[r] = r + 1;
-           for(int c=0; c<columns; c++) {
-               columnsName[c] = 65 + c;
-               matrix[auxMatrix] = "" + (char) (columnsName[c] + 32) + "" +
-                       String.valueOf(rowsName[r]);
-               matrixIndex[auxMatrixIndex] = doorHarnessesLineUp.indexOf(
-                       "*" + (char) columnsName[c] + rowsName[r] + "*");
-               auxMatrix++;
-               auxMatrixIndex++;
-           }
-        }
-
-        for(int l=0; l<gravityParts.length - 1; l++) {
-            gravityParts[l] = doorHarnessesLineUp.substring(matrixIndex[l] + 4, matrixIndex[l+1]);
-        }
-
-        gravityParts[gravityParts.length - 1] = doorHarnessesLineUp.substring(
-                matrixIndex[matrixIndex.length - 1] + 4,
-                doorHarnessesLineUp.length() - 1);
-
     }
 
     private void initValues() {
@@ -172,11 +144,11 @@ public class MainActivity extends AppCompatActivity {
         notOkImage = (ImageView) findViewById(R.id.reject_image_view);
         notOkImage.setVisibility(GONE);
 
-        partPosition = (ImageView) findViewById(R.id.pos_to_show);
-        partPosition.setVisibility(GONE);
+        messagesImage = (ImageView) findViewById(R.id.pos_to_show);
+        messagesImage.setVisibility(GONE);
 
-        activeHarnessPosImage = null;
-        partPosition.setVisibility(GONE);
+        gravityPartPosition = (TextView) findViewById(R.id.main_gravity_pos_text_view);
+        gravityPartPosition.setVisibility(GONE);
 
 
         gravityBarcodeEditText = (EditText) findViewById(R.id.gravity_part_barcode_container_edit_text);
@@ -221,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                                     codeScanned.length()-1));
                         }
                         gravityBarcodeEditText.clearFocus();
-                        checkCompatibility(activeHarnessPosImage);
+                        checkCompatibility();
                     } else {
                         gravityBarcodeEditText.setText("");
                         handler.removeCallbacks(input_finish_checker);
@@ -301,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 okImage.setVisibility(GONE);
                 notOkImage.setVisibility(GONE);
-                partPosition.setVisibility(GONE);
+                messagesImage.setVisibility(GONE);
                 barcodeImage.setVisibility(VISIBLE);
                 resetRoutine();
             }
@@ -322,54 +294,50 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean validatePartCode(String barcode) {
         char lastChar = barcode.charAt(barcode.length() - 1);
-        activeHarnessPosImage = checkHarnessPos(barcode);
+        activePartPosition = checkPartPosition(barcode);
         if(barcode.length() > 1 && lastChar == '-') {
             Toast.makeText(this, R.string.part_barcode_error, LENGTH_SHORT).show();
             return false;
         }
-        else if(activeHarnessPosImage == null && errorState.equals(ERROR404)) {
+        else if(activePartPosition == null && errorState.equals(ERROR404)) {
             barcodeImage.setVisibility(GONE);
-            partPosition.setVisibility(VISIBLE);
-            partPosition.setBackgroundResource(R.drawable.error404);
-            activeHarnessPosImage = partPosition;
+            messagesImage.setVisibility(VISIBLE);
+            messagesImage.setBackgroundResource(R.drawable.error404);
             return false;
         }
-        else if(activeHarnessPosImage == null && errorState.equals(ERRORIMAGE)) {
-            barcodeImage.setVisibility(GONE);
-            partPosition.setVisibility(VISIBLE);
-            partPosition.setBackgroundResource(R.drawable.image_not_found_error);
-            activeHarnessPosImage = partPosition;
-            errorState = ERROR404;
-            return false;
-        }
+//        else if(activePartPosition == null && errorState.equals(ERRORPOSITION)) {
+//            barcodeImage.setVisibility(GONE);
+//            messagesImage.setVisibility(VISIBLE);
+//            messagesImage.setBackgroundResource(R.drawable.image_not_found_error);
+//            errorState = ERROR404;
+//            return false;
+//        }
         else {
             barcodeImage.setVisibility(GONE);
-            partPosition.setVisibility(VISIBLE);
+            messagesImage.setVisibility(GONE);
+            gravityPartPosition.setVisibility(VISIBLE);
             return true;
         }
     }
 
-    private ImageView checkHarnessPos(String barcode) {
-        ImageView auxPartPosition = null;
-        int imageToShow;
+    private String checkPartPosition(String barcode) {
+        String auxPartPosition = null;
         for(int i=0; i<gravityParts.length; i++) {
-            if(barcode.equals(gravityParts[i]) & !barcode.equals("0")) {
-                imageToShow = getResId(matrix[i], R.drawable.class);
-                if(imageToShow >= 0) {
-                    partPosition.setBackgroundResource(imageToShow);
-                    auxPartPosition = partPosition;
-                }
-                else
-                    errorState = ERRORIMAGE;
+            if(barcode.equals(gravityParts[i]) & !barcode.equals("0"))  {
+                gravityPartPosition.setText(matrix[i].toUpperCase());
+                auxPartPosition = matrix[i];
+                break;
             }
         }
+        if(auxPartPosition == null)
+            errorState = ERROR404;
         return auxPartPosition;
     }
 
-    private void checkCompatibility(ImageView activeHarnessPosImage) {
+    private void checkCompatibility() {
         String gravityBarcode = gravityBarcodeEditText.getText().toString().trim();
         String partBarcode = partBarcodeEditText.getText().toString().trim();
-        activeHarnessPosImage.setVisibility(GONE);
+        gravityPartPosition.setVisibility(GONE);
         if(gravityBarcode.equals(partBarcode)) {
             isResultOk = true;
             okImage.setVisibility(VISIBLE);
@@ -393,8 +361,10 @@ public class MainActivity extends AppCompatActivity {
 
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
-            while((line = br.readLine()) != null)
+            while((line = br.readLine()) != null) {
                 initialText.append(line);
+                initialText.append("\r\n");
+            }
             br.close();
         }catch (IOException e) {
             e.printStackTrace();
@@ -405,10 +375,9 @@ public class MainActivity extends AppCompatActivity {
             File file = new File(dcim, "History.txt");
 
             FileWriter writer = new FileWriter(file);
+            writer.write("");
 
             writer.append(initialText.toString());
-            writer.flush();
-            writer.append('\n');
             writer.flush();
             writer.append(partBarcode);
             writer.flush();
@@ -424,8 +393,9 @@ public class MainActivity extends AppCompatActivity {
             writer.flush();
             writer.append(strDate);
             writer.flush();
-            writer.append("\r\n");
+            writer.append(";");
             writer.flush();
+
             writer.close();
             //Toast.makeText(this, "Saved to History.txt", LENGTH_SHORT).show();
         } catch(IOException e) {
@@ -453,16 +423,6 @@ public class MainActivity extends AppCompatActivity {
         //   Toast.makeText(this, "Salvado a historial", LENGTH_SHORT).show();
     }
 
-    private static int getResId(String resName, Class <?> c) {
-        try{
-            Field idField = c.getDeclaredField(resName);
-            return idField.getInt(idField);
-        } catch(Exception e){
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
     private void resetRoutine() {
         isGravityNeedToWatch = false;
         isPartNeedToWatch = false;
@@ -470,10 +430,24 @@ public class MainActivity extends AppCompatActivity {
         partBarcodeEditText.setText("");
         isPartNeedToWatch = true;
         isResultOk = true;
+        gravityPartPosition.setText("");
+        gravityPartPosition.setVisibility(GONE);
         partBarcodeEditText.setBackgroundResource(R.drawable.barcode_number_text_view_background);
         gravityBarcodeEditText.setBackgroundResource(R.drawable.barcode_number_text_view_grey_background);
         partBarcodeEditText.setFocusable(true);
         partBarcodeEditText.setFocusableInTouchMode(true);
         partBarcodeEditText.requestFocus();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(data.getIntExtra("activity", 0) == 1 && resultCode == RESULT_OK) {
+            doorHarnessesLineUp = utils.readFromFile(GRAVITYLINEUPFILE);
+            resultFromUtils = utils.populateGravityArray(doorHarnessesLineUp);
+            gravityParts = resultFromUtils.get(0);
+            matrix = resultFromUtils.get(1);
+            partsUploaded = true;
+            initValues();
+        }
     }
 }

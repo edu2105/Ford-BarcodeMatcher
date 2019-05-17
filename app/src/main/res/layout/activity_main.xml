@@ -47,6 +47,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"/>
 
+            <TextView
+                android:id="@+id/main_gravity_pos_text_view"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:background="@drawable/survey_gravity_pos"
+                android:textSize="75sp"
+                android:textColor="@color/colorBlack"
+                tools:text="A1"/>
+
         </RelativeLayout>
 
     </LinearLayout>
@@ -73,13 +84,12 @@
             
         </LinearLayout>
 
-        <LinearLayout
-            style="@style/BarcodeNumberLinearLayout">
+        <LinearLayout style="@style/BarcodeNumberLinearLayout">
 
             <EditText
                 android:id="@+id/gravity_part_barcode_container_edit_text"
                 style="@style/BarcodeNumberTextView"
-                android:hint="@string/number_hint"/>
+                android:hint="@string/number_hint" />
 
             <TextView
                 android:id="@+id/part_barcode_text_view"

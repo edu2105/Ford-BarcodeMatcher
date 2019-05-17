@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".GravityModification">
+
+    <TextView
+        android:id="@+id/mod_title_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="@dimen/vertical_margin"
+        android:gravity="center"
+        android:textColor="@color/colorBlack"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:fontFamily="sans-serif"
+        android:text="@string/modification_item"/>
+
+    <LinearLayout
+        android:id="@+id/mod_gravity_schema_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="@dimen/vertical_margin">
+
+        <TextView
+            android:id="@+id/mod_gravity_pos_text_view"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/survey_gravity_pos"
+            android:textSize="75sp"
+            android:textColor="@color/colorBlack"
+            tools:text="A1"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/vertical_margin"
+            android:layout_marginEnd="@dimen/vertical_margin"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/mod_old_barcode_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom|center"
+                android:textColor="@color/colorBlack"
+                tools:text="DB39-14A073-BE"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/colorBlack"/>
+
+            <TextView
+                android:id="@+id/mod_old_barcode_label_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom|center"
+                android:text="@string/old_barcode"/>
+
+            <EditText
+                android:id="@+id/mod_new_barcode_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="bottom|center"
+                android:textColor="@color/colorAccent"
+                android:inputType="text"
+                android:maxLines="1"
+                android:hint="@string/barcode_hint"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/colorBlack"/>
+
+            <TextView
+                android:id="@+id/mod_new_barcode_label_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom|center"
+                android:text="@string/new_barcode"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/vertical_margin"
+        android:textColor="@color/colorAccent"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:text="@string/position_to_modify"/>
+
+    <Spinner
+        android:id="@+id/mod_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/vertical_margin"
+        android:layout_marginEnd="@dimen/vertical_margin"
+        android:layout_marginBottom="@dimen/vertical_margin"/>
+
+    <LinearLayout
+        android:id="@+id/mod_buttons_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="@dimen/vertical_margin">
+
+        <Button
+            android:id="@+id/mod_retry_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/retry_button"/>
+
+        <Button
+            android:id="@+id/mod_save_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/save_button"/>
+
+    </LinearLayout>
+
+</LinearLayout>

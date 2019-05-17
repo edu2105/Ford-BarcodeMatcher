@@ -10,6 +10,7 @@
     <string name="button_restart">Reiniciar</string>
     <string name="number_hint">Número</string>
     <string name="history_item">Historial</string>
+    <string name="relevation_item">Relevamiento</string>
     <string name="empty_barcode">Sin lectura</string>
     <string name="gravity_barcode_error">Por favor escanee el código del gravity</string>
     <string name="part_barcode_error">Por favor escanee el código de la pieza</string>

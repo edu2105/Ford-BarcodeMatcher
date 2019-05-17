@@ -7,4 +7,22 @@
         android:title="@string/history_item"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/getting_started_item"
+        android:title="@string/getting_started_item"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/modification_item"
+        android:title="@string/modification_item"
+        android:visible="true"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/add_item"
+        android:title="@string/add_item"
+        android:visible="false"
+        app:showAsAction="never"/>
+
 </menu>

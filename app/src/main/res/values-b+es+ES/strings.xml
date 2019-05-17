@@ -10,6 +10,23 @@
     <string name="button_restart">Reiniciar</string>
     <string name="number_hint">Número</string>
     <string name="history_item">Historial</string>
+
+    <string name="getting_started_item">Comenzando a configurar el gravity</string>
+    <string name="columns">Columnas</string>
+    <string name="rows">Filas</string>
+    <string name="columns_hint">Cantidad de columnas</string>
+    <string name="rows_hint">Cantidad de filas</string>
+    <string name="ready_switch">Listo</string>
+    <string name="barcode_hint">Escanee código</string>
+    <string name="retry_button">Reingresar</string>
+    <string name="save_button">Guardar</string>
+
+    <string name="modification_item">Modificar Gravity</string>
+    <string name="old_barcode">Código guardado</string>
+    <string name="new_barcode">Nuevo código</string>
+    <string name="position_to_modify">Seleccione una posición a modificar</string>
+
+    <string name="add_item">Agregar Gravity</string>
     <string name="empty_barcode">Sin lectura</string>
     <string name="gravity_barcode_error">Por favor escanee el código del gravity</string>
     <string name="part_barcode_error">Por favor escanee el código de la pieza</string>

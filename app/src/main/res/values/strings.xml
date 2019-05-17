@@ -9,6 +9,23 @@
     <string name="button_restart">Reset</string>
     <string name="number_hint">Number</string>
     <string name="history_item">History</string>
+
+    <string name="getting_started_item">Getting Started</string>
+    <string name="columns">Columns</string>
+    <string name="rows">Rows</string>
+    <string name="columns_hint">Number of columns</string>
+    <string name="rows_hint">Number of rows</string>
+    <string name="ready_switch">Ready</string>
+    <string name="barcode_hint">Scan Barcode</string>
+    <string name="retry_button">Retry</string>
+    <string name="save_button">Save</string>
+
+    <string name="modification_item">Modify Gravity</string>
+    <string name="old_barcode">Old Barcode</string>
+    <string name="new_barcode">New Barcode</string>
+    <string name="position_to_modify">Select a position to modify</string>
+
+    <string name="add_item">Add Gravity</string>
     <string name="empty_barcode">No reading</string>
     <string name="gravity_barcode_error">Please read the gravity barcode</string>
     <string name="part_barcode_error">Please read the box barcode first</string>
